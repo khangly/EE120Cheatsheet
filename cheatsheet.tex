@@ -1,0 +1,172 @@
+\documentclass[letterpaper,10pt,landscape]{article}
+\usepackage{amssymb,amsmath,amsthm,amsfonts}
+\usepackage{multicol,multirow}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage[colorlinks=true,citecolor=blue,linkcolor=blue]{hyperref}
+\usepackage{minted, circuitikz}
+\usepackage{enumitem}
+
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+    { \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+%\makeatother
+\setcounter{secnumdepth}{0}
+%\setlength{\parindent}{0pt}
+%\setlength{\parskip}{0pt plus 0.5ex}
+% -----------------------------------------------------------------------
+
+\title{EE 120 Cheatsheet}
+
+\begin{document}
+
+\raggedright
+\footnotesize
+
+\setlist[itemize]{leftmargin=*}
+
+\begin{center}
+     \Large{\textbf{EE 120 Cheatsheet}} \\
+\end{center}
+\begin{multicols}{3}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\section{Time-Freq Relationships (Lecture 9)}
+\begin{enumerate}
+	\item 
+	\begin{equation*}
+		H(\omega) = \sum^\infty_{k=-\infty} h(k)e^{-i\omega k}
+	\end{equation*}
+	\begin{equation*}
+		h(n) \rightarrow h(n-N) \implies H(\omega) \rightarrow e^{-i\omega N}H(\omega)
+	\end{equation*}
+	\item Given $h(n)$ real, $\overline{H(\omega)} = H(-\omega)$
+	\item Time-reversal
+	\begin{equation*}
+		g(n) = h(-n) \implies G(\omega) = H(-\omega)
+	\end{equation*}
+	\begin{itemize}
+		\item If $h(n)$ is real and symmetric/even, $H(\omega)$ is also real and symmetric/even.
+		\item If $h(n)$ is real and odd, $H(\omega)$ is imaginary.
+	\end{itemize}
+\end{enumerate}
+
+\section{Causality (Lecture 9-10)}
+At any time $n$, $y(n)$ does not depend on any future value of $x(n)$. \\
+For LTI system, $\forall n < 0, h(n) = 0 \iff \text{causality}$
+\subsection{Real Definition}
+Upto and including some time $n$, make $x_1$ and $x_2$ the same, if this always results in $y$ having the same property, then the system is called causal.
+
+\section{Bounded Input Bounded Output (BIBO) Stability (Lecture 10)}
+\begin{equation*}
+	\sum^\infty_{k=-\infty}|h(k)| < \infty \iff \text{BIBO Stability}
+\end{equation*}
+
+\section{The Dirac $\delta(t)$ function (Lecture 11-12)}
+\begin{equation*}
+	\delta(t) = \begin{cases}
+		\infty, &t = 0 \\
+		0, &t \neq 0
+	\end{cases}
+\end{equation*}
+\begin{equation*}
+	\int^b_a\delta(t)dt = \begin{cases}
+		1, &\mbox{if } 0 \in [a, b] \\
+		0, &\mbox{otherwise}
+	\end{cases}
+\end{equation*}
+Not a well-defined function.
+\subsection{Properties}
+\begin{enumerate}
+	\item Sifting
+	\begin{equation*}
+		\int^\infty_{\tau=-\infty}x(\tau)\delta(\tau-T)d\tau = x(T)
+	\end{equation*}
+	\item 
+	\begin{equation*}
+		u(t) = \int^t_{\tau=-\infty} \delta(\tau)d\tau \iff \frac{d}{dt}u(t) = \delta(t)
+	\end{equation*}
+	\item
+	\begin{equation*}
+		x(t)\delta(t-T) = x(T)\delta(t-T)
+	\end{equation*}
+\end{enumerate}
+
+%\section{LCCDEs}
+\section{Linear Constant-Coefficient Differential Equations (Lecture 13)}
+\begin{align*}
+	&a_N\frac{d^N}{dt^N}y(t) + a_{N-1}\frac{d^{N-1}}{dt^{N-1}}y(t) + \dots + a_0y(t) = \\ &b_M\frac{d^M}{dt^M}x(t) + b_{M-1}\frac{d^{M-1}}{dt^{M-1}}x(t) + \dots + b_0x(t)
+\end{align*}
+\begin{equation*}
+	H(\omega) = \frac{(i\omega)^Mb_M + (i\omega)^{M-1}b_{M-1} + \dots + b_0}{(i\omega)^Na_N + (i\omega)^{N-1}a_{N-1} + \dots + a_0}
+\end{equation*}
+$H(\omega)$ is a rational function in $i\omega$.
+\subsection{IAG Diagrams}
+\subsection{Solve second order using state-space form}
+\subsection{Graphs (Lecture 14)}
+\begin{equation*}
+	\lambda_{1,2} = \frac{-D\pm\sqrt{D^2-4MK}}{2M}
+\end{equation*}
+\begin{itemize}
+	\item Overdamped
+	\begin{equation*}
+		D^2 - 4MK > 0
+	\end{equation*}
+	\item Critical damping
+	\begin{equation*}
+		D^2 - 4MK = 0
+	\end{equation*}
+	\item Underdamping
+	\begin{equation*}
+		D^2 - 4MK < 0
+	\end{equation*}
+	\item Undamped
+	\begin{equation*}
+		D = 0
+	\end{equation*}
+\end{itemize}
+\subsection{Impulse Response}
+\begin{align*}
+	h(t) &= Ce^{At}Bu(t) \\
+	&= \frac{e^{\frac{-D}{2M}t}\left(e^{\frac{\sqrt{D^2-4KM}}{2M}t} - e^{-\frac{\sqrt{D^2-4KM}}{2M}t}\right)}{\sqrt{D^2-4KM}}u(t)
+\end{align*}
+\subsection{Frequency Response}
+\begin{equation*}
+	H(\omega) = \frac{1}{M(i\omega)^2+D(i\omega)+K}
+\end{equation*}
+
+\section{Feedback}
+\subsection{Black's Formula}
+\begin{itemize}
+	\item $P$: Plant
+	\item $K$: Controller
+\end{itemize}
+\begin{equation*}
+	H(\omega) = \frac{P(\omega)}{1-K(\omega)P(\omega)}
+\end{equation*}
+
+\end{multicols}
+
+\end{document}
